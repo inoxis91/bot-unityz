@@ -8,6 +8,7 @@ async function handleAdminCommands(interaction, context) {
         if (interaction.commandName === 'rappel-alert') await handleRappelAlert(interaction, context);
         else if (interaction.commandName === 'rappel-list') await handleRappelList(interaction, context);
         else if (interaction.commandName === 'ajouter-membre') await handleAjouterMembre(interaction, context);
+        else if (interaction.commandName === 'supprimer-membre') await handleSupprimerMembre(interaction, context);
         else if (interaction.commandName === 'sync-membres') await handleSyncMembres(interaction, context);
     } catch (error) {
         console.error(`Erreur dans handleAdminCommands pour ${interaction.commandName}:`, error);
@@ -51,6 +52,49 @@ async function handleAjouterMembre(interaction, context) {
     
     await sheets.spreadsheets.values.append({ spreadsheetId: sheetId, range: MAIN_SHEET_TITLE, valueInputOption: 'USER_ENTERED', resource: { values: [newRow] } });
     await interaction.editReply({ content: `✅ Le membre <@${membre.id}> a été ajouté.` });
+}
+
+async function handleSupprimerMembre(interaction, context) {
+    const { sheets, sheetId } = context;
+    const membre = interaction.options.getUser('membre');
+
+    const mainData = await sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: MAIN_SHEET_TITLE });
+    if (!mainData.data.values) return interaction.editReply({ content: "❌ La feuille est vide." });
+
+    const rows = mapSheetData(mainData.data.values);
+    const targetRow = rows.find(r => r.data['ID Discord'] === membre.id);
+
+    if (!targetRow) {
+        return interaction.editReply({ content: `❌ Le membre <@${membre.id}> n'a pas été trouvé dans la liste.` });
+    }
+
+    // Récupérer le sheetId (GID) de l'onglet "Cotisations"
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId: sheetId });
+    const sheet = spreadsheet.data.sheets.find(s => s.properties.title === MAIN_SHEET_TITLE);
+    const gid = sheet.properties.sheetId;
+
+    // Supprimer la ligne (l'index targetRow.index est 1-based, deleteDimension utilise 0-based start/end)
+    const rowIndex = targetRow.index - 1;
+
+    await sheets.spreadsheets.batchUpdate({
+        spreadsheetId: sheetId,
+        resource: {
+            requests: [
+                {
+                    deleteDimension: {
+                        range: {
+                            sheetId: gid,
+                            dimension: 'ROWS',
+                            startIndex: rowIndex,
+                            endIndex: rowIndex + 1
+                        }
+                    }
+                }
+            ]
+        }
+    });
+
+    await interaction.editReply({ content: `✅ Le membre <@${membre.id}> a été supprimé de la liste.` });
 }
 
 async function handleSyncMembres(interaction, context) {

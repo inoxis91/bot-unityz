@@ -48,6 +48,13 @@ Ajoute un nouveau membre au système de suivi. Cette commande est utile si un no
     -   `membre` (Requis) : Le membre Discord à ajouter.
 -   **Exemple :** `/ajouter-membre membre: @NouveauMembre`
 
+### `/supprimer-membre`
+Supprime un membre du système de suivi des cotisations. La ligne correspondant au membre sera retirée du fichier Excel.
+
+-   **Options :**
+    -   `membre` (Requis) : Le membre Discord à supprimer.
+-   **Exemple :** `/supprimer-membre membre: @AncienMembre`
+
 ### `/sync-membres`
 Compare la liste des membres dans la base de données avec les membres du serveur Discord ayant le rôle "Membre". Tous les membres qui sont sur Discord mais pas encore dans le fichier de suivi seront automatiquement ajoutés. C'est un bon moyen de s'assurer que tout le monde est bien dans le système.
 

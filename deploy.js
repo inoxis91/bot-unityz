@@ -59,6 +59,13 @@ const commands = [
                 .setDescription('Le nouveau membre à ajouter')
                 .setRequired(true)),
     new SlashCommandBuilder()
+        .setName('supprimer-membre')
+        .setDescription('[Officier] Supprime un membre du suivi des cotisations.')
+        .addUserOption(option =>
+            option.setName('membre')
+                .setDescription('Le membre à supprimer')
+                .setRequired(true)),
+    new SlashCommandBuilder()
         .setName('sync-membres')
         .setDescription('[Officier] Synchronise le tableau avec les membres ayant le rôle "Membre".'),
     new SlashCommandBuilder()

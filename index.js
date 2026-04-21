@@ -55,7 +55,7 @@ client.on(Events.InteractionCreate, async interaction => {
         const isEphemeral = interaction.commandName !== 'rappel-list';
         await interaction.deferReply({ ephemeral: isEphemeral });
 
-        const adminCommands = ['rappel-list', 'rappel-alert', 'ajouter-membre', 'sync-membres'];
+        const adminCommands = ['rappel-list', 'rappel-alert', 'ajouter-membre', 'supprimer-membre', 'sync-membres'];
         const userCommands = ['declarer', 'ma-cotisation'];
 
         if (adminCommands.includes(interaction.commandName)) {

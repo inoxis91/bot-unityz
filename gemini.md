@@ -52,6 +52,10 @@ Sert de file d'attente pour les paiements déclarés, en attente de validation.
 -   **Description :** Ajoute manuellement un nouveau membre au suivi, avec sa cotisation pour le mois en cours marquée comme payée.
 -   **Options :** `membre` (requis).
 
+#### `/supprimer-membre`
+-   **Description :** Supprime définitivement un membre du suivi des cotisations dans le fichier Excel.
+-   **Options :** `membre` (requis).
+
 #### `/sync-membres`
 -   **Description :** Synchronise la feuille `Cotisations` avec le serveur Discord. Ajoute tous les utilisateurs ayant le rôle "Membre" qui ne seraient pas dans la feuille.
 -   **Options :** Aucune.
